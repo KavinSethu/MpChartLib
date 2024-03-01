@@ -25,13 +25,13 @@ class MyMarkerView(context: Context, layoutRes: Int) : MarkerView(context, layou
 
     override fun draw(canvas: Canvas, posX: Float, posY: Float) {
         val x = -width / 2f
-        var y = -height - 24f
+        var y = -height - 8f
 
         topArrow.isVisible = false
         bottomArrow.isVisible = true
 
         if (posY < canvas.height / 2f) {
-            y = 24f
+            y = 8f
             topArrow.isVisible = true
             bottomArrow.isVisible = false
         }
@@ -45,10 +45,12 @@ class MyMarkerView(context: Context, layoutRes: Int) : MarkerView(context, layou
         if (e == null) return
 
         val value = "${e.y.toInt()}"
-        valueTv.text = value
+
+
+        valueTv.text = "$value Kg"
 
         // Assuming date is available from the Entry
-        val date = "Some Date" // Replace with actual date
+        val date = "1 Mar" // Replace with actual date
         dateTv.text = date
 
         super.refreshContent(e, highlight)

@@ -82,10 +82,15 @@ fun LineGraph(
             val dataSet = LineDataSet(entries, dataLabel).apply {
                 // Here we apply styling to the dataset
                 color = lineColor.toArgb()
+                lineWidth = 2f
                 setDrawValues(drawValues)
+
                 setDrawCircles(drawMarkers)
                 setCircleColor(circleColor.toArgb())
                 setCircleHoleColor(circleHoleColor.toArgb())
+                circleRadius = 3f
+                setCircleHoleRadius(2f)
+
                 setDrawFilled(drawFilled)
                 setDrawHighlightIndicators(false)
                 fillAlpha = fillAlpha
