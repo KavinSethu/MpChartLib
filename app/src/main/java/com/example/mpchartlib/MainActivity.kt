@@ -1,31 +1,33 @@
 package com.example.mpchartlib
 
 import android.os.Bundle
+import android.view.MotionEvent
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.mpchartlib.ui.theme.MpChartLibTheme
 import androidx.compose.ui.viewinterop.AndroidView
+import com.example.mpchartlib.ui.theme.MpChartLibTheme
 import com.example.mpchartlib.ui.theme.thmeme
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.ChartTouchListener
+import com.github.mikephil.charting.listener.OnChartGestureListener
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxWidth()
                             .height(200.dp)) {
 
-                        LineGraph(xData = xData, yData = yData, dataLabel = "data")
+                        LineGraph(xData = xData, yData = yData, dataLabel = "")
                     }
                 }
             }
@@ -73,6 +75,8 @@ fun LineGraph(
             .height(200.dp)
             .fillMaxWidth(),
         factory = { context ->
+
+            //input data
             val chart = LineChart(context)  // Initialise the chart
             val entries: List<Entry> =
                 xData.zip(yData) { x, y -> Entry(x, y) }  // Convert the x and y data into entries
@@ -88,6 +92,9 @@ fun LineGraph(
             }
             chart.data = LineData(dataSet)
 
+
+
+
             // Enable touch gestures
             chart.setTouchEnabled(true)
             chart.isDragEnabled = true
@@ -95,18 +102,23 @@ fun LineGraph(
             chart.isScaleYEnabled = false
 
 
-            //Remove Border
+
+
+
+            //Remove Border --- Customize X, Y Axis borders and text
             // Customize x-axis
             val xAxis = chart.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)
             xAxis.setDrawLabels(true)
             xAxis.textColor = Color.Black.toArgb()
+            xAxis.setDrawAxisLine(false)
 
             // Customize y-axis
             val leftAxis = chart.axisLeft
             leftAxis.setDrawGridLines(false)
             leftAxis.textColor = Color.Black.toArgb()
+            leftAxis.setDrawAxisLine(false)
 
             // Disable right y-axis
             val rightAxis = chart.axisRight
@@ -117,6 +129,64 @@ fun LineGraph(
 
 
 
+
+
+
+
+            // Listener for chart touch events
+            chart.setOnChartGestureListener(object : OnChartGestureListener {
+                override fun onChartGestureStart(
+                    me: MotionEvent?,
+                    lastPerformedGesture: ChartTouchListener.ChartGesture?
+                ) {
+                }
+
+                override fun onChartGestureEnd(
+                    me: MotionEvent?,
+                    lastPerformedGesture: ChartTouchListener.ChartGesture?
+                ) {
+                }
+
+                override fun onChartLongPressed(me: MotionEvent?) {
+                }
+
+                override fun onChartDoubleTapped(me: MotionEvent?) {
+                }
+
+                override fun onChartSingleTapped(me: MotionEvent?) {
+                }
+
+                override fun onChartFling(
+                    me1: MotionEvent?,
+                    me2: MotionEvent?,
+                    velocityX: Float,
+                    velocityY: Float
+                ) {
+                }
+
+                override fun onChartScale(me: MotionEvent?, scaleX: Float, scaleY: Float) {
+                }
+
+                override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {
+                }
+            })
+
+            // Listener for value selected
+            chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+                override fun onValueSelected(e: Entry?, h: Highlight?) {
+                    e?.let {
+                        val x = e.x.toInt()
+                        val y = e.y
+
+                        Toast.makeText(context, "clicked $x $y", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+
+                override fun onNothingSelected() {
+                    Toast.makeText(context, "hide", Toast.LENGTH_SHORT).show()
+                }
+            })
 
 
             // Refresh and return the chart
