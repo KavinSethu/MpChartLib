@@ -1,5 +1,6 @@
 package com.example.mpchartlib
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
 
+@SuppressLint("ViewConstructor")
 class MyMarkerView(context: Context, layoutRes: Int) : MarkerView(context, layoutRes) {
 
     private val valueTv: TextView = findViewById(R.id.value_tv)

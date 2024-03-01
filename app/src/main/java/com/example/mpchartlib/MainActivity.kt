@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val xData = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f ,12f)
-                    val yData = listOf(20f, 30f, 40f, 35f, 50f, 45f, 60f, 70f, 80f, 40f, 70f)
+                    val yData = listOf(50f, 30f, 40f, 35f, 50f, 45f, 60f, 70f, 80f, 40f, 70f)
 
                     Column(
                         Modifier
@@ -114,6 +114,7 @@ fun LineGraph(
             xAxis.setDrawLabels(true)
             xAxis.textColor = Color.Black.toArgb()
             xAxis.setDrawAxisLine(false)
+            xAxis.setAvoidFirstLastClipping(true)
 
             // Customize y-axis
             val leftAxis = chart.axisLeft
@@ -140,6 +141,7 @@ fun LineGraph(
                     me: MotionEvent?,
                     lastPerformedGesture: ChartTouchListener.ChartGesture?
                 ) {
+                    chart.highlightValues(null)
                 }
 
                 override fun onChartGestureEnd(
