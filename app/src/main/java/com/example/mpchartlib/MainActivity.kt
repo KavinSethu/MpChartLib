@@ -40,8 +40,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val xData = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f)
-                    val yData = listOf(20f, 30f, 40f, 35f, 50f, 45f, 60f)
+                    val xData = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f ,12f)
+                    val yData = listOf(20f, 30f, 40f, 35f, 50f, 45f, 60f, 70f, 80f, 40f, 70f)
 
                     Column(
                         Modifier
@@ -88,6 +88,7 @@ fun LineGraph(
                 setCircleColor(circleColor.toArgb())
                 setCircleHoleColor(circleHoleColor.toArgb())
                 setDrawFilled(drawFilled)
+                setDrawHighlightIndicators(false)
                 fillAlpha = fillAlpha
             }
             chart.data = LineData(dataSet)
@@ -134,7 +135,7 @@ fun LineGraph(
 
 
             // Listener for chart touch events
-            chart.setOnChartGestureListener(object : OnChartGestureListener {
+            chart.onChartGestureListener = object : OnChartGestureListener {
                 override fun onChartGestureStart(
                     me: MotionEvent?,
                     lastPerformedGesture: ChartTouchListener.ChartGesture?
@@ -169,7 +170,7 @@ fun LineGraph(
 
                 override fun onChartTranslate(me: MotionEvent?, dX: Float, dY: Float) {
                 }
-            })
+            }
 
             // Listener for value selected
             chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -177,20 +178,20 @@ fun LineGraph(
                     e?.let {
                         val x = e.x.toInt()
                         val y = e.y
-
-                        Toast.makeText(context, "clicked $x $y", Toast.LENGTH_SHORT).show()
-
                     }
                 }
 
                 override fun onNothingSelected() {
-                    Toast.makeText(context, "hide", Toast.LENGTH_SHORT).show()
                 }
             })
+
+            val markerView = MyMarkerView.create(context, R.xml.custom_marker_view)
+            chart.marker = markerView
 
 
             // Refresh and return the chart
             chart.invalidate()
+            chart.legend.isEnabled = false
             chart
         }
     )

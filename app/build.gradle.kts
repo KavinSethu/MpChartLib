@@ -61,6 +61,10 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
