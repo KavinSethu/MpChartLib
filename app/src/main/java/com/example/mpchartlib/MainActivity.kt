@@ -2,7 +2,6 @@ package com.example.mpchartlib
 
 import android.os.Bundle
 import android.view.MotionEvent
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -98,8 +97,9 @@ fun LineGraph(
 
             // Enable touch gestures
             chart.setTouchEnabled(true)
+            chart.setPinchZoom(false)
             chart.isDragEnabled = true
-            chart.isScaleXEnabled = true
+            chart.isScaleXEnabled = false
             chart.isScaleYEnabled = false
 
 
@@ -191,7 +191,17 @@ fun LineGraph(
 
             // Refresh and return the chart
             chart.invalidate()
+
+            //disable lengeds
             chart.legend.isEnabled = false
+
+            //visible items range
+            chart.setVisibleXRangeMaximum(6f)
+
+            // Disable highlight on drag
+//            chart.isHighlightPerDragEnabled = false
+
+
             chart
         }
     )
