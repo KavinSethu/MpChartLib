@@ -147,6 +147,7 @@ fun LineGraph(
                     lastPerformedGesture: ChartTouchListener.ChartGesture?
                 ) {
                     chart.highlightValues(null)
+                    chart.marker = null
                 }
 
                 override fun onChartGestureEnd(
@@ -185,6 +186,9 @@ fun LineGraph(
                     e?.let {
                         val x = e.x.toInt()
                         val y = e.y
+
+                        val markerView = MyMarkerView.create(context, R.xml.custom_marker_view)
+                        chart.marker = markerView
                     }
                 }
 
