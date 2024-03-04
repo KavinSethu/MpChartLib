@@ -141,7 +141,6 @@ fun LineGraph(
             xAxis.isGranularityEnabled = true
             xAxis.labelCount = entries.size
             xAxis.textColor = Color.Black.toArgb()
-            xAxis.textSize = 7f
             xAxis.setDrawAxisLine(false) //Remove Border for the axis
             xAxis.setAvoidFirstLastClipping(true) //axis initial and end lable pading
             xAxis.valueFormatter = customXAxisValueFormatter

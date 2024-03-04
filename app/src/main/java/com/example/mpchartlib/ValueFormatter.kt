@@ -10,7 +10,9 @@ class CustomXAxisValueFormatter(private val entries: List<Entry>) : ValueFormatt
             val customData = entries[index].data as? CustomData
             customData?.let {
                 // Format the label as "Value\nDate" using HTML
-                return Html.fromHtml("${it.value}<br>${it.date}", Html.FROM_HTML_MODE_LEGACY).toString()
+//                return Html.fromHtml("${it.value}<br>${it.date}", Html.FROM_HTML_MODE_LEGACY).toString()
+
+                return customData.date
             }
         }
         return ""
