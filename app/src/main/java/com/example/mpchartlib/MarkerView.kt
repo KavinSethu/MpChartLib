@@ -1,9 +1,11 @@
 package com.example.mpchartlib
 
+import CustomData
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.text.Html
 import android.widget.ImageView
 import android.widget.TextView
 import com.github.mikephil.charting.charts.LineChart
@@ -14,6 +16,12 @@ import com.github.mikephil.charting.utils.MPPointF
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.renderer.XAxisRenderer
+import com.github.mikephil.charting.utils.Transformer
+import com.github.mikephil.charting.utils.ViewPortHandler
 
 @SuppressLint("ViewConstructor")
 class MyMarkerView(context: Context, layoutRes: Int) : MarkerView(context, layoutRes) {
@@ -44,14 +52,15 @@ class MyMarkerView(context: Context, layoutRes: Int) : MarkerView(context, layou
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         if (e == null) return
 
-        val value = "${e.y.toInt()}"
+        val customData = e.data as? CustomData
 
-
-        valueTv.text = "$value Kg"
-
-        // Assuming date is available from the Entry
-        val date = "1 Mar" // Replace with actual date
-        dateTv.text = date
+        if (customData != null) {
+            valueTv.text = "${customData?.value} ${customData.unit}"
+            dateTv.text = "${customData.date}"
+        } else {
+            valueTv.text = ""
+            dateTv.text =  ""
+        }
 
         super.refreshContent(e, highlight)
     }
@@ -67,4 +76,3 @@ class MyMarkerView(context: Context, layoutRes: Int) : MarkerView(context, layou
         }
     }
 }
-

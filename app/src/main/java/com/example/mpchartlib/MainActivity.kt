@@ -1,5 +1,7 @@
 package com.example.mpchartlib
 
+import CustomData
+import CustomXAxisValueFormatter
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.ComponentActivity
@@ -42,12 +44,22 @@ class MainActivity : ComponentActivity() {
                     val xData = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f ,12f)
                     val yData = listOf(50f, 30f, 40f, 35f, 50f, 45f, 60f, 70f, 80f, 40f, 70f)
 
+
+                    val customDataList = listOf(
+                        CustomData(112f, "mmHg", "4 March"),
+                        CustomData(120f, "mmHg", "5 March"),
+                        CustomData(105f, "mmHg", "6 March"),
+                        CustomData(118f, "mmHg", "7 March"),
+                        CustomData(125f, "mmHg", "8 March"),
+                        CustomData(108f, "mmHg", "9 March")
+                    )
+
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .height(200.dp)) {
 
-                        LineGraph(xData = xData, yData = yData, dataLabel = "")
+                        LineGraph(xData = xData, yData = yData, dataLabel = "", customDataList = customDataList)
                     }
                 }
             }
@@ -59,6 +71,7 @@ class MainActivity : ComponentActivity() {
 fun LineGraph(
     xData: List<Float>,
     yData: List<Float>,
+    customDataList: List<CustomData>,
     dataLabel: String,
     lineColor: Color = thmeme,
     fillColor: Color = thmeme,
@@ -77,8 +90,14 @@ fun LineGraph(
 
             //input data
             val chart = LineChart(context)  // Initialise the chart
-            val entries: List<Entry> =
-                xData.zip(yData) { x, y -> Entry(x, y) }  // Convert the x and y data into entries
+
+            //convert the given list into entried list
+            val entries = customDataList.mapIndexed { index, customData ->
+                Entry(index.toFloat(), customData.value, customData)
+            }
+
+
+            //create data set state
             val dataSet = LineDataSet(entries, dataLabel).apply {
                 // Here we apply styling to the dataset
                 color = lineColor.toArgb()
@@ -110,16 +129,22 @@ fun LineGraph(
 
 
 
+            // Create an instance of your custom formatter
+            val customXAxisValueFormatter = CustomXAxisValueFormatter(entries)
 
-            //Remove Border --- Customize X, Y Axis borders and text
+
             // Customize x-axis
             val xAxis = chart.xAxis
             xAxis.position = XAxis.XAxisPosition.BOTTOM
             xAxis.setDrawGridLines(false)
             xAxis.setDrawLabels(true)
+            xAxis.isGranularityEnabled = true
+            xAxis.labelCount = entries.size
             xAxis.textColor = Color.Black.toArgb()
-            xAxis.setDrawAxisLine(false)
-            xAxis.setAvoidFirstLastClipping(true)
+            xAxis.textSize = 7f
+            xAxis.setDrawAxisLine(false) //Remove Border for the axis
+            xAxis.setAvoidFirstLastClipping(true) //axis initial and end lable pading
+            xAxis.valueFormatter = customXAxisValueFormatter
 
             // Customize y-axis
             val leftAxis = chart.axisLeft
@@ -207,10 +232,10 @@ fun LineGraph(
             chart.legend.isEnabled = false
 
             //visible items range
-            chart.setVisibleXRangeMaximum(6f)
+            chart.setVisibleXRangeMaximum(4f)
 
             // Disable highlight on drag
-//            chart.isHighlightPerDragEnabled = false
+            chart.isHighlightPerDragEnabled = false
 
 
             chart
