@@ -1,6 +1,7 @@
 package com.example.mpchartlib
 
 import CustomData
+import CustomXAxisRenderer
 import CustomXAxisValueFormatter
 import android.os.Bundle
 import android.view.MotionEvent
@@ -22,6 +23,7 @@ import com.example.mpchartlib.ui.theme.MpChartLibTheme
 import com.example.mpchartlib.ui.theme.thmeme
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -29,6 +31,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,8 +145,18 @@ fun LineGraph(
             xAxis.labelCount = entries.size
             xAxis.textColor = Color.Black.toArgb()
             xAxis.setDrawAxisLine(false) //Remove Border for the axis
-            xAxis.setAvoidFirstLastClipping(true) //axis initial and end lable pading
+//            xAxis.setAvoidFirstLastClipping(true) //axis initial and end lable pading
             xAxis.valueFormatter = customXAxisValueFormatter
+
+
+            //render for split the xaxis line into two
+            chart.setXAxisRenderer(
+                CustomXAxisRenderer(
+                    chart.getViewPortHandler(),
+                    chart.getXAxis(),
+                    chart.getTransformer(YAxis.AxisDependency.LEFT)
+                )
+            )
 
             // Customize y-axis
             val leftAxis = chart.axisLeft
