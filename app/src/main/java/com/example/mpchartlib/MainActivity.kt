@@ -44,10 +44,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val xData = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f, 11f ,12f)
-                    val yData = listOf(50f, 30f, 40f, 35f, 50f, 45f, 60f, 70f, 80f, 40f, 70f)
-
-
                     val customDataList = listOf(
                         CustomData(112f, "mmHg", "4 March"),
                         CustomData(120f, "mmHg", "5 March"),
@@ -57,12 +53,22 @@ class MainActivity : ComponentActivity() {
                         CustomData(108f, "mmHg", "9 March")
                     )
 
+
+                    val customDataList2 = listOf(
+                        CustomData(115f, "mmHg", "4 March"),
+                        CustomData(110f, "mmHg", "5 March"),
+                        CustomData(109f, "mmHg", "6 March"),
+                        CustomData(108f, "mmHg", "7 March"),
+                        CustomData(135f, "mmHg", "8 March"),
+                        CustomData(118f, "mmHg", "9 March")
+                    )
+
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .height(200.dp)) {
 
-                        LineGraph(xData = xData, yData = yData, dataLabel = "", customDataList = customDataList)
+                        LineGraph(dataLabel = "", customDataList = customDataList, customDataList2 = customDataList2)
                     }
                 }
             }
@@ -72,9 +78,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LineGraph(
-    xData: List<Float>,
-    yData: List<Float>,
     customDataList: List<CustomData>,
+    customDataList2: List<CustomData>,
     dataLabel: String,
     lineColor: Color = thmeme,
     fillColor: Color = thmeme,
@@ -94,6 +99,7 @@ fun LineGraph(
             //input data
             val chart = LineChart(context)  // Initialise the chart
 
+            //Entries 1
             //convert the given list into entried list
             val entries = customDataList.mapIndexed { index, customData ->
                 Entry(index.toFloat(), customData.value, customData)
@@ -117,7 +123,35 @@ fun LineGraph(
                 setDrawHighlightIndicators(false)
                 fillAlpha = fillAlpha
             }
-            chart.data = LineData(dataSet)
+
+
+            //Entries 2
+            //convert the given list into entried list
+            val entries2 = customDataList2.mapIndexed { index, customData2 ->
+                Entry(index.toFloat(), customData2.value, customData2)
+            }
+
+
+            //create data set state
+            val dataSet2 = LineDataSet(entries2, dataLabel).apply {
+                // Here we apply styling to the dataset
+                color = lineColor.toArgb()
+                lineWidth = 2f
+                setDrawValues(drawValues)
+
+                setDrawCircles(drawMarkers)
+                setCircleColor(circleColor.toArgb())
+                setCircleHoleColor(circleHoleColor.toArgb())
+                circleRadius = 3f
+                setCircleHoleRadius(2f)
+
+                setDrawFilled(drawFilled)
+                setDrawHighlightIndicators(false)
+                fillAlpha = fillAlpha
+            }
+
+
+            chart.data = LineData(dataSet, dataSet2)
 
 
 
